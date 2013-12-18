@@ -20,6 +20,47 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		keyboardServer.KeyUp(wParam);
 		break;
+		 // ************ MOUSE MESSAGES ************ //
+	case WM_MOUSEMOVE: {
+		int x = (short)LOWORD(lParam);
+		int y = (short)HIWORD(lParam);
+		if (x > 0 && x < 1100 && y > 0 && y < 800) {
+			mouseServer.UpdateMousePosition(x, y);
+			if (!mouseServer.IsInWindow()) {
+				SetCapture(hwnd);
+				mouseServer.OnEnter();
+			}
+		}
+		else {
+			if ( wParam & (MK_LBUTTON | MK_RBUTTON) ) {
+				x = max( 0,x );
+				x = min( SCREEN_WIDTH-1,x );
+				y = max( 0,y );
+				y = min( SCREEN_HEIGHT-1,y );
+				mouseServer.UpdateMousePosition(x, y);
+			}
+			else {
+				ReleaseCapture();
+				mouseServer.OnExit();
+				mouseServer.LeftMouseButtonReleased();
+				mouseServer.RightMouseButtonReleased();
+			}
+		}
+		break;
+	}
+	case WM_LBUTTONDOWN:
+		SetFocus(hwnd);
+		mouseServer.LeftMouseButtonPressed();
+		break;
+	case WM_RBUTTONDOWN:
+		mouseServer.RightMouseButtonPressed();
+		break;
+	case WM_LBUTTONUP:
+		mouseServer.LeftMouseButtonReleased();
+		break;
+	case WM_RBUTTONUP:
+		mouseServer.RightMouseButtonReleased();
+		break;
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;

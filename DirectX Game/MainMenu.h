@@ -1,8 +1,27 @@
 #pragma once
-class MainMenu
+
+#include "D3DGraphics.h"
+#include "GameState.h"
+#include "GameEngine.h"
+
+#include <memory>
+
+class MainMenu : public GameState
 {
+private:
+	std::shared_ptr<D3DGraphics> gfx;
+	std::shared_ptr<GameEngine> game;
 public:
-	MainMenu(void);
+	MainMenu(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game);
 	~MainMenu(void);
+
+	void Init();
+	void Cleanup();
+
+	void Pause();
+	void Resume();
+
+	void Tick();
+	void Draw();
 };
 

@@ -1,30 +1,16 @@
-#include <iostream>
-#include <io.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <memory>
-
 #include "GameEngine.h"
 #include "GameState.h"
 
+#include <iostream>
+#include <memory>
 
 GameEngine::GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, std::shared_ptr<D3DGraphics> gfx) : m_running(false), gfx(gfx)
 {
-	keyboard = new Keyboard(kServer);
+	keyboard = std::make_shared<Keyboard>(kServer);
+	mouse = std::make_shared<Mouse>(mServer);
 
-	AllocConsole();
-
-    HANDLE handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
-    int hCrt = _open_osfhandle((long) handle_out, _O_TEXT);
-    FILE* hf_out = _fdopen(hCrt, "w");
-    setvbuf(hf_out, NULL, _IONBF, 1);
-    *stdout = *hf_out;
-
-    HANDLE handle_in = GetStdHandle(STD_INPUT_HANDLE);
-    hCrt = _open_osfhandle((long) handle_in, _O_TEXT);
-    FILE* hf_in = _fdopen(hCrt, "r");
-    setvbuf(hf_in, NULL, _IONBF, 128);
-    *stdin = *hf_in;
+	console = std::make_shared<Console>();
+	console->Init();
 		
 	fpsTimer.StartWatch();
 	frameTimer.StartWatch();

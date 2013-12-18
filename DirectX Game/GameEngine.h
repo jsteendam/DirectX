@@ -7,6 +7,7 @@
 #include "Mouse.h"
 #include "D3DGraphics.h"
 #include "Timer.h"
+#include "Console.h"
 
 const float FRAME_TIME = 33.3333f;
 const float TICK_TIME = 33.3333f;
@@ -16,10 +17,9 @@ class GameState;
 class GameEngine
 {
 private:
-private:
-	//Mouse* mouse;
 
 	std::shared_ptr<D3DGraphics> gfx;
+	std::shared_ptr<Console> console;
 
 	// FPS Timers
 	unsigned int frames;
@@ -30,7 +30,8 @@ private:
 	Timer fpsTimer;
 	Timer frameTimer;
 public:
-	Keyboard* keyboard;
+	std::shared_ptr<Keyboard> keyboard;
+	std::shared_ptr<Mouse> mouse;
 
 	GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, std::shared_ptr<D3DGraphics> gfx);
 	~GameEngine(void);
