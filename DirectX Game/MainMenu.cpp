@@ -3,6 +3,7 @@
 MainMenu::MainMenu(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game) : gfx(gfx), game(game)
 {
 	std::cout << "Level1 Constructor" << std::endl;
+	animation = 0.0;
 }
 
 MainMenu::~MainMenu(void)
@@ -28,14 +29,20 @@ void MainMenu::Resume()
 
 void MainMenu::Tick()
 {
-	//if(game->mouse->MouseInWindow())
+	if(game->mouse->MouseInWindow())
 	{
 		std::cout << "(" << game->mouse->getMouseX() << ", " << game->mouse->getMouseY() << ")" << std::endl;
 	}
+	if(game->keyboard->isPressed('d'))
+	{
+		game->PopState();
+	}
+	if(animation < gfx->GetHeight())
+		animation+=12.5;
 }
 
 void MainMenu::Draw()
 {
-	gfx->DrawRect(250, 0, 300, gfx->GetHeight(), 0xFFFFFF);
-	gfx->DrawRect(300, 200, 200, 75, 0x000000);
+	if(animation > 0)
+		gfx->DrawRect(200, 0, 400, (int)(animation), 0xFFFFFF);
 }

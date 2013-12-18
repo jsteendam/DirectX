@@ -1,5 +1,6 @@
 #include "Level1.h"
 #include "Level2.h"
+#include "MainMenu.h"
 
 #include <iostream>
 
@@ -33,7 +34,7 @@ void Level1::Tick()
 {
 	if(game->keyboard->isPressed('a'))
 	{
-		game->PushState(std::make_shared<Level2>(gfx, game));
+		game->PushState(std::make_shared<MainMenu>(gfx, game));
 	}
 }
 

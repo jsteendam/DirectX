@@ -9,8 +9,8 @@
 #include "Timer.h"
 #include "Console.h"
 
-const float FRAME_TIME = 33.3333f;
-const float TICK_TIME = 33.3333f;
+#define FRAME_TIME 33.3333f
+#define TICK_TIME 16.6667f
 
 class GameState;
 
@@ -23,12 +23,16 @@ private:
 
 	// FPS Timers
 	unsigned int frames;
+	unsigned int ticks;
 
 	std::vector<std::shared_ptr<GameState>> states;
 	bool m_running;
+	bool tmp;
 	
 	Timer fpsTimer;
+	Timer tpsTimer;
 	Timer frameTimer;
+	Timer tickTimer;
 public:
 	std::shared_ptr<Keyboard> keyboard;
 	std::shared_ptr<Mouse> mouse;

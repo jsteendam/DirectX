@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory>
+#include <cmath>
 
 GameEngine::GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, std::shared_ptr<D3DGraphics> gfx) : m_running(false), gfx(gfx)
 {
@@ -13,7 +14,9 @@ GameEngine::GameEngine(const KeyboardServer& kServer, const MouseServer& mServer
 	console->Init();
 		
 	fpsTimer.StartWatch();
+	tpsTimer.StartWatch();
 	frameTimer.StartWatch();
+	tickTimer.StartWatch();
 }
 
 
@@ -58,21 +61,47 @@ void GameEngine::Go()
 		frames = 0;
 		fpsTimer.Restart();
 	}
+
+	// Time TPS
+	if(tpsTimer.GetTimeMilli() >= 1000.0) {
+		std::cout << ticks << " tps" << std::endl;
+		ticks = 0;
+		tpsTimer.Restart();
+	}
 	
 	// Tick
-	Tick();
+	if(tickTimer.GetTimeMilli() >= TICK_TIME) {
+		ticks++;
+		Tick();
+		tickTimer.Restart();
+		tickTimer.GetTimeMilli();
+	}
 
 	// Draw
-	frameTimer.Restart();
-	gfx->BeginFrame();
-	frames++;
-	Draw();
-	gfx->EndFrame();
+	if(frameTimer.GetTimeMilli() >= FRAME_TIME) {
+		gfx->BeginFrame();
+		frames++;
+		Draw();
+		gfx->EndFrame();
+		frameTimer.Restart();
+	}
 
-	float difference = FRAME_TIME - frameTimer.GetTimeMilli();
-	if(difference > 0)
-		Sleep(difference);
-	else { /* Something went wrong, you should leave now */ }
+	float tickDifference = TICK_TIME - tickTimer.GetTimeMilli();
+	float frameDifference = FRAME_TIME - frameTimer.GetTimeMilli();
+	auto min = min(tickDifference, frameDifference);
+	////std::cout << tickDifference << ", " << frameDifference << std::endl;
+	if(frameDifference > tickDifference) {
+		if(tickDifference > 0)
+			Sleep(tickDifference);
+		else
+			tickTimer.Restart();
+	}
+	else {
+		if(frameDifference > 0)
+			Sleep(frameDifference);
+		else
+			frameTimer.Restart();
+	}
 }
 
 
@@ -85,6 +114,7 @@ void GameEngine::Tick()
 
 void GameEngine::Draw()
 {
+	auto s = states.size();
 	if(states.size() > 0)
 		states[states.size()-1]->Draw();
 }

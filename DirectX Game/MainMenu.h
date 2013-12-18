@@ -11,6 +11,8 @@ class MainMenu : public GameState
 private:
 	std::shared_ptr<D3DGraphics> gfx;
 	std::shared_ptr<GameEngine> game;
+
+	double animation;
 public:
 	MainMenu(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game);
 	~MainMenu(void);

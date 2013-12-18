@@ -25,6 +25,7 @@ private:
 	IDirect3DDevice9*	pDevice;
 	IDirect3DSurface9*	pBackBuffer;
 	D3DLOCKED_RECT		backRect;
+	D3DCOLOR*			pSysBuffer;
 
 	int width;
 	int height;

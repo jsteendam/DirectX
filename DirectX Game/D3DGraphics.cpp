@@ -28,6 +28,8 @@ D3DGraphics::D3DGraphics( HWND hWnd, int width, int height ) : width(width), hei
 	result = pDevice->GetBackBuffer( 0,0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer );
 	
 	assert( !FAILED( result ) );
+
+	pSysBuffer = new D3DCOLOR[ width * height ];
 }
 
 D3DGraphics::~D3DGraphics()
@@ -44,44 +46,47 @@ D3DGraphics::~D3DGraphics()
 		pBackBuffer->Release();
 		pBackBuffer = NULL;
 	}
+	if( pSysBuffer )
+	{
+		delete pSysBuffer;
+		pSysBuffer = NULL;
+	}
 }
 
 void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int r, int g, int b )
 {
-	if((x > width) | (y > height)) {
-		//std::cout << "(" << x << ", " << y << ") out of bounds!" << std::endl;
-		return;
-	}
-	else
-		((D3DCOLOR*)backRect.pBits)[ x + (backRect.Pitch >> 2) * y ] = D3DCOLOR_XRGB( r,g,b );
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < width );
+	assert( y < height );
+	pSysBuffer[x + y * width] = D3DCOLOR_XRGB( r,g,b );
 }
 
 void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int color )
 {
-	if((x > width) | (y > height)) {
-		//std::cout << "(" << x << ", " << y << ") out of bounds!" << std::endl;
-		return;
-	}
-	else
-		((D3DCOLOR*)backRect.pBits)[ x + (backRect.Pitch >> 2) * y ] = color;
+	assert( x >= 0 );
+	assert( y >= 0 );
+	assert( x < width );
+	assert( y < height );
+	pSysBuffer[x + y * width] = color;
 }
 
 void D3DGraphics::BeginFrame()
 {
-	HRESULT result;
-
-	result = pDevice->Clear( 0,NULL,D3DCLEAR_TARGET,D3DCOLOR_XRGB(0,0,0),0.0f,0 );
-	assert( !FAILED( result ) );
-
-	result = pBackBuffer->LockRect( &backRect,NULL,NULL );
-	assert( !FAILED( result ) );
+	memset( pSysBuffer,0xE0,sizeof( D3DCOLOR ) * width * height);
 }
 
 void D3DGraphics::EndFrame()
 {
 	HRESULT result;
 	
-	
+	result = pBackBuffer->LockRect( &backRect,NULL,NULL );
+	assert( !FAILED( result ) );
+
+	for( int y = 0; y < height; y++ )
+	{
+		memcpy( &((BYTE*)backRect.pBits)[ backRect.Pitch * y ],&pSysBuffer[ width * y ],sizeof( D3DCOLOR ) * width );
+	}
 
 	result = pBackBuffer->UnlockRect();
 	assert( !FAILED( result ) );
@@ -184,5 +189,5 @@ void D3DGraphics::DrawRect(int x, int y, int width, int height, D3DCOLOR color)
 
 void D3DGraphics::Clear(D3DCOLOR color)
 {
-	DrawRect(0, 0, width-1, height-1, color);
+	DrawRect(0, 0, width, height, color);
 }
