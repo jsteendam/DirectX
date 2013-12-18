@@ -3,9 +3,8 @@
 #include <memory>
 
 #include "D3DGraphics.h"
-#include "Drawable.h"
 
-class Character : Drawable
+class Character
 {
 private:
 	int x;

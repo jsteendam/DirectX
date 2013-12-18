@@ -1,4 +1,5 @@
 #include "D3DGraphics.h"
+
 #include <math.h>
 #include <assert.h>
 #include <iostream>
@@ -47,20 +48,20 @@ D3DGraphics::~D3DGraphics()
 
 void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int r, int g, int b )
 {
-	//assert(x > width);
-	//assert(y > height);
-	if((x > width) | (y > height))
+	if((x > width) | (y > height)) {
+		//std::cout << "(" << x << ", " << y << ") out of bounds!" << std::endl;
 		return;
+	}
 	else
 		((D3DCOLOR*)backRect.pBits)[ x + (backRect.Pitch >> 2) * y ] = D3DCOLOR_XRGB( r,g,b );
 }
 
 void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int color )
 {
-	//assert(x > width);
-	//assert(y > height);
-	if((x > width) | (y > height))
+	if((x > width) | (y > height)) {
+		//std::cout << "(" << x << ", " << y << ") out of bounds!" << std::endl;
 		return;
+	}
 	else
 		((D3DCOLOR*)backRect.pBits)[ x + (backRect.Pitch >> 2) * y ] = color;
 }
@@ -174,7 +175,7 @@ void D3DGraphics::DrawRect(int x, int y, int width, int height, D3DCOLOR color)
 {
 	for(int xx = x; xx < (x+width); xx++)
 	{
-		for(int yy = y; xx < (y+height); yy++)
+		for(int yy = y; yy < (y+height); yy++)
 		{
 			PutPixel(xx, yy, color);
 		}
@@ -183,5 +184,5 @@ void D3DGraphics::DrawRect(int x, int y, int width, int height, D3DCOLOR color)
 
 void D3DGraphics::Clear(D3DCOLOR color)
 {
-	//DrawRect(0, 0, width-1, height-1, color);
+	DrawRect(0, 0, width-1, height-1, color);
 }

@@ -4,8 +4,8 @@
 #include "Mouse.h"
 #include "Game.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
 static KeyboardServer keyboardServer;
 static MouseServer mouseServer;
@@ -54,8 +54,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	ShowWindow(hWnd, nCmdShow);
 	
 	// Init game
-	std::shared_ptr<D3DGraphics> gfx = std::make_shared<D3DGraphics>(hWnd, SCREEN_WIDTH, SCREEN_HEIGHT);
-	Game theGame(keyboardServer, mouseServer, gfx);
+	Game theGame(hWnd, keyboardServer, mouseServer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	// Start message pump
 	MSG msg;

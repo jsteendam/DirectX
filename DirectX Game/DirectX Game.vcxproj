@@ -80,21 +80,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="D3DGraphics.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Level1.cpp" />
+    <ClCompile Include="Level2.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="D3DGraphics.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="Level.h" />
+    <ClInclude Include="Level1.h" />
+    <ClInclude Include="Level2.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>

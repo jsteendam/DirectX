@@ -32,5 +32,5 @@ void Character::Tick()
 
 void Character::Draw()
 {
-	gfx->DrawDisc(x, 600-y, width, 100, 100, 255);
+	//gfx->DrawDisc(x, 600-y, width, 100, 100, 255);
 }
