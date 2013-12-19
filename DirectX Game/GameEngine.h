@@ -9,14 +9,16 @@
 #include "Timer.h"
 #include "Console.h"
 
-#define FRAME_TIME 33.3333f
-#define TICK_TIME 16.6667f
+#define TICKS 120
+#define FRAMES 60
 
 class GameState;
 
 class GameEngine
 {
 private:
+	const float FRAME_TIME;
+	const float TICK_TIME;
 
 	std::shared_ptr<D3DGraphics> gfx;
 	std::shared_ptr<Console> console;
@@ -37,7 +39,7 @@ public:
 	std::shared_ptr<Keyboard> keyboard;
 	std::shared_ptr<Mouse> mouse;
 
-	GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, std::shared_ptr<D3DGraphics> gfx);
+	GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, const std::shared_ptr<D3DGraphics>& gfx);
 	~GameEngine(void);
 
 	void ChangeState(std::shared_ptr<GameState> state);

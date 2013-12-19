@@ -19,7 +19,9 @@ public:
 	void EndFrame();
 	
 	int GetWidth() { return width; }
-	int GetHeight() { return height; }
+	int GetHeight() {
+		return height;
+	}
 private:
 	IDirect3D9*			pDirect3D;
 	IDirect3DDevice9*	pDevice;

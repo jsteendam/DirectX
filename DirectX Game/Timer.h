@@ -1,18 +1,20 @@
 #pragma once
 
-#include <windows.h>
+#include <chrono>
 
 class Timer
 {
 public:
 	Timer();
-	void StartWatch();
-	void StopWatch();
+	void Start();
+	void Stop();
 	void Restart();
-	float GetTimeMilli() const;
+	double GetTimePassed();
 private:
-	float invFreqMilli;
-	bool watchStopped;
-	__int64 currentCount;
-	__int64 startCount;
+	typedef std::chrono::time_point<std::chrono::system_clock> SystemClock;
+	
+	SystemClock begin;
+	SystemClock end;
+
+	bool isCounting;
 };

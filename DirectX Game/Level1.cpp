@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-Level1::Level1(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game) : gfx(gfx), game(game)
+Level1::Level1(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game) : gfx(gfx), game(game)
 {
 	std::cout << "Level1 Constructor" << std::endl;
 }

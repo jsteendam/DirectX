@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Level2::Level2(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game) : gfx(gfx), game(game)
+Level2::Level2(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game) : gfx(gfx), game(game)
 {
 	std::cout << "Level2 Constructor" << std::endl;
 }

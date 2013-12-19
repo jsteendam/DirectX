@@ -1,14 +1,14 @@
 #include "MainMenu.h"
 
-MainMenu::MainMenu(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game) : gfx(gfx), game(game)
+MainMenu::MainMenu(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game) : gfx(gfx), game(game)
 {
-	std::cout << "Level1 Constructor" << std::endl;
+	std::cout << "MainMenu Constructor" << std::endl;
 	animation = 0.0;
 }
 
 MainMenu::~MainMenu(void)
 {
-	std::cout << "Level1 Destructor" << std::endl;
+	std::cout << "MainMenu Destructor" << std::endl;
 }
 
 void MainMenu::Init()
@@ -29,20 +29,21 @@ void MainMenu::Resume()
 
 void MainMenu::Tick()
 {
-	if(game->mouse->MouseInWindow())
-	{
-		std::cout << "(" << game->mouse->getMouseX() << ", " << game->mouse->getMouseY() << ")" << std::endl;
+	if(animation < gfx->GetHeight()) {
+		animation+=25;
 	}
-	if(game->keyboard->isPressed('d'))
-	{
+	if(game->mouse->MouseInWindow()) {
+		//std::cout << "(" << game->mouse->getMouseX() << ", " << game->mouse->getMouseY() << ")" << std::endl;
+	}
+	if(game->keyboard->isPressed('d')) {
 		game->PopState();
 	}
-	if(animation < gfx->GetHeight())
-		animation+=12.5;
 }
 
 void MainMenu::Draw()
 {
-	if(animation > 0)
+	if(animation < gfx->GetHeight())
 		gfx->DrawRect(200, 0, 400, (int)(animation), 0xFFFFFF);
+	else
+		gfx->DrawRect(200, 0, 400, gfx->GetHeight(), 0xFFFFFF);
 }

@@ -12,9 +12,9 @@ private:
 	int height;
 	int width;
 
-	std::shared_ptr<D3DGraphics> gfx;
+	const std::shared_ptr<D3DGraphics>& gfx;
 public:
-	Character(std::shared_ptr<D3DGraphics> gfx);
+	Character(const std::shared_ptr<D3DGraphics>& gfx);
 	~Character(void);
 	
 	void MoveRight();

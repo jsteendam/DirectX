@@ -20,7 +20,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		keyboardServer.KeyUp(wParam);
 		break;
-		 // ************ MOUSE MESSAGES ************ //
 	case WM_MOUSEMOVE: {
 		int x = (short)LOWORD(lParam);
 		int y = (short)HIWORD(lParam);

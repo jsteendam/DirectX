@@ -12,7 +12,7 @@ private:
 	std::shared_ptr<D3DGraphics> gfx;
 	std::shared_ptr<GameEngine> game;
 public:
-	Level2(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game);
+	Level2(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game);
 	~Level2(void);
 
 	void Init();

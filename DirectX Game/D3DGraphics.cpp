@@ -4,6 +4,9 @@
 #include <assert.h>
 #include <iostream>
 
+static int i = 0;
+static int j = 0;
+
 D3DGraphics::D3DGraphics( HWND hWnd, int width, int height ) : width(width), height(height)
 {
 	HRESULT result;
@@ -51,6 +54,7 @@ D3DGraphics::~D3DGraphics()
 		delete pSysBuffer;
 		pSysBuffer = NULL;
 	}
+	std::cout << "Destruction is imminent!" << std::endl;
 }
 
 void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int r, int g, int b )
@@ -68,6 +72,7 @@ void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int color )
 	assert( y >= 0 );
 	assert( x < width );
 	assert( y < height );
+	i++;
 	pSysBuffer[x + y * width] = color;
 }
 
@@ -178,6 +183,7 @@ void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,int r,int g,int
 
 void D3DGraphics::DrawRect(int x, int y, int width, int height, D3DCOLOR color)
 {
+	j++;
 	for(int xx = x; xx < (x+width); xx++)
 	{
 		for(int yy = y; yy < (y+height); yy++)

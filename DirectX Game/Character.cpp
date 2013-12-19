@@ -1,7 +1,7 @@
 #include "Character.h"
 #include "D3DGraphics.h"
 
-Character::Character(std::shared_ptr<D3DGraphics> gfx) : gfx(gfx), x(5), y(5), width(5)
+Character::Character(const std::shared_ptr<D3DGraphics>& gfx) : gfx(gfx), x(5), y(5), width(5)
 {
 
 }

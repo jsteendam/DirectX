@@ -14,7 +14,7 @@ private:
 
 	double animation;
 public:
-	MainMenu(std::shared_ptr<D3DGraphics> gfx, std::shared_ptr<GameEngine> game);
+	MainMenu(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game);
 	~MainMenu(void);
 
 	void Init();

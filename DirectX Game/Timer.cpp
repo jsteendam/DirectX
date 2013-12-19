@@ -1,40 +1,34 @@
 #include "Timer.h"
 
-Timer::Timer()
+Timer::Timer() : isCounting(false)
 {
-	__int64 frequency;
-	QueryPerformanceFrequency( (LARGE_INTEGER*)&frequency );
-	invFreqMilli = 1.0f / (float)((double)frequency / 1000.0);
-	StartWatch();
 }
 
-void Timer::StopWatch()
+void Timer::Start()
 {
-	if(!watchStopped)	{
-		QueryPerformanceCounter( (LARGE_INTEGER*)&currentCount );
-		watchStopped = true;
-	}
+	begin = std::chrono::system_clock::now();
+	isCounting = true;
 }
 
-void Timer::StartWatch()
+void Timer::Stop()
 {
-	watchStopped = false;
-	QueryPerformanceCounter( (LARGE_INTEGER*)&startCount );
+	end = std::chrono::system_clock::now();
+	isCounting = false;
 }
 
 void Timer::Restart()
 {
-	watchStopped = false;
-	QueryPerformanceCounter( (LARGE_INTEGER*)&startCount );
+	begin = std::chrono::system_clock::now();
+	isCounting = true;
 }
 
-float Timer::GetTimeMilli() const
+double Timer::GetTimePassed()
 {
-	if(!watchStopped) {
-		QueryPerformanceCounter( (LARGE_INTEGER*)&currentCount );
-		return (float)(currentCount - startCount) * invFreqMilli;
+	if(isCounting) {
+		SystemClock now = std::chrono::system_clock::now();
+		return ((std::chrono::duration<double, std::milli>)(now - begin)).count();
 	}
 	else {
-		return (float)(currentCount - startCount) * invFreqMilli;
+		return ((std::chrono::duration<double, std::milli>)(end - begin)).count();
 	}
 }
