@@ -1,9 +1,18 @@
 #include "MainMenu.h"
+#include "Level2.h"
+
+#include <Windows.h>
 
 MainMenu::MainMenu(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game) : gfx(gfx), game(game)
 {
 	std::cout << "MainMenu Constructor" << std::endl;
 	animation = 0.0;
+	if(game->keyboard->isPressed(VK_ESCAPE)) {
+		waitForRelease = true;
+	}
+	else {
+		waitForRelease = false;
+	}
 }
 
 MainMenu::~MainMenu(void)
@@ -29,21 +38,21 @@ void MainMenu::Resume()
 
 void MainMenu::Tick()
 {
-	if(animation < gfx->GetHeight()) {
-		animation+=25;
+	if(animation < gfx->GetHeight() - 100) {
+		animation+=50;
 	}
-	if(game->mouse->MouseInWindow()) {
-		//std::cout << "(" << game->mouse->getMouseX() << ", " << game->mouse->getMouseY() << ")" << std::endl;
+	if(!game->keyboard->isPressed(VK_ESCAPE)) {
+		waitForRelease = false;
 	}
-	if(game->keyboard->isPressed('d')) {
+	if(!waitForRelease && game->keyboard->isPressed(VK_ESCAPE)) {
 		game->PopState();
 	}
 }
 
 void MainMenu::Draw()
 {
-	if(animation < gfx->GetHeight())
-		gfx->DrawRect(200, 0, 400, (int)(animation), 0xFFFFFF);
+	if(animation < gfx->GetHeight() - 100)
+		gfx->DrawRect(150, 0, 400, (int)(animation), 0xFFFFFF);
 	else
-		gfx->DrawRect(200, 0, 400, gfx->GetHeight(), 0xFFFFFF);
+		gfx->DrawRect(150, 0, 400, gfx->GetHeight() - 100, 0xFFFFFF);
 }

@@ -7,27 +7,26 @@
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-static KeyboardServer keyboardServer;
-static MouseServer mouseServer;
-
+std::shared_ptr<KeyboardServer> keyboardServer = std::make_shared<KeyboardServer>();
+std::shared_ptr<MouseServer> mouseServer = std::make_shared<MouseServer>();
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch(uMsg) {
 	case WM_KEYDOWN:
-		keyboardServer.KeyDown(wParam);
+		keyboardServer->KeyDown(wParam);
 		break;
 	case WM_KEYUP:
-		keyboardServer.KeyUp(wParam);
+		keyboardServer->KeyUp(wParam);
 		break;
 	case WM_MOUSEMOVE: {
 		int x = (short)LOWORD(lParam);
 		int y = (short)HIWORD(lParam);
 		if (x > 0 && x < 1100 && y > 0 && y < 800) {
-			mouseServer.UpdateMousePosition(x, y);
-			if (!mouseServer.IsInWindow()) {
+			mouseServer->UpdateMousePosition(x, y);
+			if (!mouseServer->IsInWindow()) {
 				SetCapture(hwnd);
-				mouseServer.OnEnter();
+				mouseServer->OnEnter();
 			}
 		}
 		else {
@@ -36,29 +35,35 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				x = min( SCREEN_WIDTH-1,x );
 				y = max( 0,y );
 				y = min( SCREEN_HEIGHT-1,y );
-				mouseServer.UpdateMousePosition(x, y);
+				mouseServer->UpdateMousePosition(x, y);
 			}
 			else {
 				ReleaseCapture();
-				mouseServer.OnExit();
-				mouseServer.LeftMouseButtonReleased();
-				mouseServer.RightMouseButtonReleased();
+				mouseServer->OnExit();
+				mouseServer->LeftMouseButtonReleased();
+				mouseServer->RightMouseButtonReleased();
 			}
 		}
 		break;
 	}
 	case WM_LBUTTONDOWN:
 		SetFocus(hwnd);
-		mouseServer.LeftMouseButtonPressed();
+		mouseServer->LeftMouseButtonPressed();
 		break;
 	case WM_RBUTTONDOWN:
-		mouseServer.RightMouseButtonPressed();
+		mouseServer->RightMouseButtonPressed();
 		break;
 	case WM_LBUTTONUP:
-		mouseServer.LeftMouseButtonReleased();
+		mouseServer->LeftMouseButtonReleased();
 		break;
 	case WM_RBUTTONUP:
-		mouseServer.RightMouseButtonReleased();
+		mouseServer->RightMouseButtonReleased();
+		break;
+	case WM_MOUSEWHEEL:
+		if((HIWORD(wParam) == 0x78))
+			mouseServer->WheelUp();
+		else if(HIWORD(wParam) == 0xff88)
+			mouseServer->WheelDown();
 		break;
 	case WM_CLOSE:
 		PostQuitMessage(0);

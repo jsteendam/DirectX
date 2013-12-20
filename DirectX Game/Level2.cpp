@@ -30,7 +30,7 @@ void Level2::Resume()
 
 void Level2::Tick()
 {
-	if(game->keyboard->isPressed('s'))
+	if(game->keyboard->isPressed('d'))
 	{
 		game->PopState();
 	}
@@ -38,5 +38,5 @@ void Level2::Tick()
 
 void Level2::Draw()
 {
-	gfx->DrawRect(300, 300, 100, 100, 0xFF6464);
+	gfx->Clear(0xFF6464);
 }

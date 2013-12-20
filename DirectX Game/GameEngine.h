@@ -9,41 +9,43 @@
 #include "Timer.h"
 #include "Console.h"
 
-#define TICKS 120
-#define FRAMES 60
+#define TICKS_PER_SECOND 120
+#define FRAMES_PER_SECOND 60
 
 class GameState;
 
 class GameEngine
 {
 private:
-	const float FRAME_TIME;
-	const float TICK_TIME;
+	const double FRAME_TIME;
+	const double TICK_TIME;
 
 	std::shared_ptr<D3DGraphics> gfx;
 	std::shared_ptr<Console> console;
 
 	// FPS Timers
-	unsigned int frames;
-	unsigned int ticks;
+	int frames;
+	int ticks;
+
+	double frameDelay;
+	double tickDelay;
 
 	std::vector<std::shared_ptr<GameState>> states;
 	bool m_running;
 	bool tmp;
 	
-	Timer fpsTimer;
-	Timer tpsTimer;
+	Timer performanceTimer;
 	Timer frameTimer;
 	Timer tickTimer;
 public:
 	std::shared_ptr<Keyboard> keyboard;
 	std::shared_ptr<Mouse> mouse;
 
-	GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, const std::shared_ptr<D3DGraphics>& gfx);
+	GameEngine(const std::shared_ptr<KeyboardServer>& kServer, const std::shared_ptr<MouseServer>& mServer, const std::shared_ptr<D3DGraphics>& gfx);
 	~GameEngine(void);
 
 	void ChangeState(std::shared_ptr<GameState> state);
-	void PushState(std::shared_ptr<GameState> state);
+	void PushState(const std::shared_ptr<GameState>& state);
 	void PopState();
 
 	void Go();

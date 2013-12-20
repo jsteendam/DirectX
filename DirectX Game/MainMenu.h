@@ -13,6 +13,8 @@ private:
 	std::shared_ptr<GameEngine> game;
 
 	double animation;
+
+	bool waitForRelease;
 public:
 	MainMenu(const std::shared_ptr<D3DGraphics>& gfx, const std::shared_ptr<GameEngine>& game);
 	~MainMenu(void);

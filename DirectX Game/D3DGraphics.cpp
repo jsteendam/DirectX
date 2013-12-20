@@ -4,9 +4,6 @@
 #include <assert.h>
 #include <iostream>
 
-static int i = 0;
-static int j = 0;
-
 D3DGraphics::D3DGraphics( HWND hWnd, int width, int height ) : width(width), height(height)
 {
 	HRESULT result;
@@ -57,28 +54,38 @@ D3DGraphics::~D3DGraphics()
 	std::cout << "Destruction is imminent!" << std::endl;
 }
 
-void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int r, int g, int b )
+void D3DGraphics::PutPixel(int x, int y, int r, int g, int b)
 {
-	assert( x >= 0 );
-	assert( y >= 0 );
-	assert( x < width );
-	assert( y < height );
+	//assert( x >= 0 );
+	//assert( y >= 0 );
+	//assert( x < width );
+	//assert( y < height );
+	if(x < 0  ||  y < 0 || x >= width || y >= height)
+		return;
 	pSysBuffer[x + y * width] = D3DCOLOR_XRGB( r,g,b );
+	//((D3DCOLOR*)backRect.pBits)[ x + (backRect.Pitch >> 2) * y ] = D3DCOLOR_XRGB( r,g,b );
 }
 
-void D3DGraphics::PutPixel( unsigned int x, unsigned int y, int color )
+void D3DGraphics::PutPixel(int x, int y, D3DCOLOR color)
 {
-	assert( x >= 0 );
-	assert( y >= 0 );
-	assert( x < width );
-	assert( y < height );
-	i++;
+	//assert( x >= 0 );
+	//assert( y >= 0 );
+	//assert( x < width );
+	//assert( y < height );
+	if(x < 0  ||  y < 0 || x >= width || y >= height)
+		return;
 	pSysBuffer[x + y * width] = color;
+	//((D3DCOLOR*)backRect.pBits)[ x + (backRect.Pitch >> 2) * y ] = color;
 }
 
 void D3DGraphics::BeginFrame()
 {
 	memset( pSysBuffer,0xE0,sizeof( D3DCOLOR ) * width * height);
+
+	//HRESULT result;
+
+	//result = pBackBuffer->LockRect( &backRect,NULL,NULL );
+	//assert( !FAILED( result ) );
 }
 
 void D3DGraphics::EndFrame()
@@ -183,7 +190,6 @@ void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,int r,int g,int
 
 void D3DGraphics::DrawRect(int x, int y, int width, int height, D3DCOLOR color)
 {
-	j++;
 	for(int xx = x; xx < (x+width); xx++)
 	{
 		for(int yy = y; yy < (y+height); yy++)
@@ -195,5 +201,7 @@ void D3DGraphics::DrawRect(int x, int y, int width, int height, D3DCOLOR color)
 
 void D3DGraphics::Clear(D3DCOLOR color)
 {
-	DrawRect(0, 0, width, height, color);
+	for(int i = 0; i < (width*height); i++)
+		pSysBuffer[i] = color;
+	//DrawRect(0, 0, width, height, color);
 }

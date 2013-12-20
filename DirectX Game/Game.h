@@ -14,7 +14,7 @@ private:
 	std::shared_ptr<D3DGraphics> gfx;
 	std::shared_ptr<GameEngine> game;
 public:
-	Game(HWND hwnd, const KeyboardServer& kServ, const MouseServer& mServ, const int width, const int height);
+	Game(HWND hwnd, const std::shared_ptr<KeyboardServer>& kServ, const std::shared_ptr<MouseServer>& mServ, const int width, const int height);
 	~Game(void);
 
 	void Go();

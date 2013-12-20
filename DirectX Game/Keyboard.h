@@ -1,48 +1,36 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 
 class Keyboard;
 
 class KeyboardServer
 {
 	friend Keyboard;
-	bool a_pressed;
-	bool s_pressed;
-	bool w_pressed;
-	bool d_pressed;
+	bool key_states[128];
 public:
-	KeyboardServer() {}
+	KeyboardServer() {
+		for(int i = 0; i < 128; i++)
+			key_states[i] = false;
+	}
 
 	void KeyDown(char character) {
-		if(character == 'A')
-			a_pressed = true;
-		else if(character == 'S')
-			s_pressed = true;
-		else if(character == 'W')
-			w_pressed = true;
-		else if(character == 'D')
-			d_pressed = true;
+		//std::cout << "Down: " << character << "[" << ((int)(character)) << "]" << std::endl;
+		key_states[(int)(character)] = true;
 	}
 
 	void KeyUp(char character) {
-		if(character == 'A')
-			a_pressed = false;
-		else if(character == 'S')
-			s_pressed = false;
-		else if(character == 'W')
-			w_pressed = false;
-		else if(character == 'D')
-			d_pressed = false;
+		key_states[(int)(character)] = false;
 	}
 };
 
 class Keyboard
 {
 private:
-	const KeyboardServer& kServ;
+	std::shared_ptr<KeyboardServer> kServ;
 public:
-	Keyboard(const KeyboardServer& kServ);
+	Keyboard(const std::shared_ptr<KeyboardServer>& kServ);
 	~Keyboard(void);
 	
 	bool isPressed(char character);

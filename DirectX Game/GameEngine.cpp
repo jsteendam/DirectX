@@ -2,10 +2,11 @@
 #include "GameState.h"
 
 #include <iostream>
+#include <iomanip>
 #include <memory>
 #include <cmath>
 
-GameEngine::GameEngine(const KeyboardServer& kServer, const MouseServer& mServer, const std::shared_ptr<D3DGraphics>& gfx) : m_running(false), gfx(gfx) , TICK_TIME(1000.0/TICKS), FRAME_TIME(1000.0/FRAMES)
+GameEngine::GameEngine(const std::shared_ptr<KeyboardServer>& kServer, const std::shared_ptr<MouseServer>& mServer, const std::shared_ptr<D3DGraphics>& gfx) : m_running(false), gfx(gfx) , TICK_TIME(1000.0/TICKS_PER_SECOND), FRAME_TIME(1000.0/FRAMES_PER_SECOND)
 {
 	keyboard = std::make_shared<Keyboard>(kServer);
 	mouse = std::make_shared<Mouse>(mServer);
@@ -13,8 +14,7 @@ GameEngine::GameEngine(const KeyboardServer& kServer, const MouseServer& mServer
 	console = std::make_shared<Console>();
 	console->Init();
 		
-	fpsTimer.Start();
-	tpsTimer.Start();
+	performanceTimer.Start();
 	frameTimer.Start();
 	tickTimer.Start();
 }
@@ -35,7 +35,7 @@ void GameEngine::ChangeState(std::shared_ptr<GameState> state)
 }
 
 
-void GameEngine::PushState(std::shared_ptr<GameState> state)
+void GameEngine::PushState(const std::shared_ptr<GameState>& state)
 {
 	states.push_back(state);
 	state->Init();
@@ -55,27 +55,17 @@ void GameEngine::PopState()
 
 void GameEngine::Go()
 {
-	Timer tim;
-	tim.Start();
-	Sleep(100);
-	double b = tim.GetTimePassed();
-
-	// Time FPS
-	if(fpsTimer.GetTimePassed() >= 1000.0) {
-		std::cout << frames << " fps" << std::endl;
+	// Time FPS and TPS
+	if(performanceTimer.GetTimePassed() >= 1000.0) {
+		//std::cout << "FPS: " << std::setw(3) << frames << ", TPS: " << std::setw(3) << ticks << '\n';
 		frames = 0;
-		fpsTimer.Restart();
-	}
-
-	// Time TPS
-	if(tpsTimer.GetTimePassed() >= 1000.0) {
-		std::cout << ticks << " tps" << std::endl;
 		ticks = 0;
-		tpsTimer.Restart();
+		performanceTimer.Restart();
 	}
 	
 	// Tick
 	if(tickTimer.GetTimePassed() >= TICK_TIME) {
+		tickDelay = tickTimer.GetTimePassed() - TICK_TIME;
 		tickTimer.Restart();
 		ticks++;
 		Tick();
@@ -83,6 +73,7 @@ void GameEngine::Go()
 
 	// Draw
 	if(frameTimer.GetTimePassed() >= FRAME_TIME) {
+		frameDelay = frameTimer.GetTimePassed() - FRAME_TIME;
 		frameTimer.Restart();
 		gfx->BeginFrame();
 		frames++;
@@ -90,15 +81,13 @@ void GameEngine::Go()
 		gfx->EndFrame();
 	}
 
-	float tickDifference = TICK_TIME - tickTimer.GetTimePassed();
-	float frameDifference = FRAME_TIME - frameTimer.GetTimePassed();
-	auto aksld = frameTimer.GetTimePassed();
-	auto aksasdfld = tickTimer.GetTimePassed();
+	double tickDifference = (TICK_TIME - tickDelay) - tickTimer.GetTimePassed();
+	double frameDifference = (FRAME_TIME - frameDelay) - frameTimer.GetTimePassed();
 	auto min = min(tickDifference, frameDifference);
 	if(min > 0)
 		Sleep(min);
-	else
-		std::cout << "Halp!" << std::endl;
+	//else
+		//std::cout << "Halp!" << std::endl;
 }
 
 
